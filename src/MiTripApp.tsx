@@ -1,9 +1,10 @@
+import { LoginPage } from "./auth/pages"
+import { AppRouter } from "./router/AppRouter"
 
 
 export const MiTripApp = () => {
   return (
-    <>
-        <h1>miTrip</h1>
-    </>
+    //TODO: Add Theme
+   <AppRouter/>
   )
 }
