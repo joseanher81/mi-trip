@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { BrowserRouter} from 'react-router-dom';
 import { MiTripApp } from './MiTripApp';
+import { store } from './store/store';
 import './styles.css';
 
 
@@ -10,8 +12,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <MiTripApp />
-    </BrowserRouter>
+    <Provider store={ store }>
+      <BrowserRouter>
+        <MiTripApp />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
