@@ -1,33 +1,30 @@
 import { FormEvent } from 'react';
-
 import { Link } from 'react-router-dom';
 import { Grid, TextField, Button, Typography } from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
-import { useForm } from '../../hooks/useForm';
+import { useAuthStore, useForm } from '../../hooks';
 
+const initState = {
+    displayName: '',
+    email: '',
+    password: ''
+}
 
+const formValidations = {
+    displayName: [ ( value: string ) => value.length >= 6, 'The name must have at least 6 characters'],
+    email: [ (value: string ) => {
+        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(value);
+        }, 'The email is not valid'],
+    password: [ ( value: string ) => value.length >= 6, 'The password must have at least 6 characters']
+
+}
 
 export const SignUpPage = () => {
 
-    const initState = {
-        displayName: '',
-        email: '',
-        password1: ''
-    }
+    const { startCreatingUserWithEmailAndPassword } = useAuthStore();
 
-    const formValidations = {
-        displayName: [ ( value: string ) => value.length >= 6, 'The name must have at least 6 characters'],
-        email: [ (value: string ) => {
-            const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return regex.test(value);
-            }, 'The email is not valid'],
-        password1: [ ( value: string ) => value.length >= 6, 'The password must have at least 6 characters']
-
-    }
-
-    const { displayName, email, password1, displayNameValid, emailValid, password1Valid, onChange, isFormValid } = useForm(initState, formValidations);
-
-
+    const { displayName, email, password, displayNameValid, emailValid, passwordValid, onChange, isFormValid } = useForm(initState, formValidations);
 
     const onSubmit = ( event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -36,6 +33,7 @@ export const SignUpPage = () => {
         console.log("IS" + isFormValid)
 
         //TODO aquí el dispatch
+        startCreatingUserWithEmailAndPassword( {email, displayName, password} );
 
         console.log('Sign up form submited');
     }
@@ -77,10 +75,10 @@ export const SignUpPage = () => {
                             type='password'
                             placeholder='Password'
                             fullWidth
-                            name='password1'
-                            value={ password1 }
+                            name='password'
+                            value={ password }
                             onChange={ onChange }
-                            helperText={ password1Valid }
+                            helperText={ passwordValid }
                         />
                     </Grid>
 
@@ -97,7 +95,7 @@ export const SignUpPage = () => {
                 <Grid container direction='row' justifyContent='end'>
                     <Typography sx={{ mr: 1 }}>Already have an account?</Typography>
                     <Link color='inherit' to="/auth/login">
-                    Login
+                        Log In
                     </Link>
                 </Grid>
 

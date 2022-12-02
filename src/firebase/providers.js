@@ -6,8 +6,13 @@ const googleProvider = new GoogleAuthProvider();
 export const loginWithGoogle = async () => {
 
     try {
-        const resp = await signInWithPopup( FirebaseAuth, googleProvider );
-        const { displayName, email, photoURL, uid } = resp.user;
+        const { user, _tokenResponse } = await signInWithPopup( FirebaseAuth, googleProvider );
+        const { displayName, email, photoURL, uid } = user;
+
+        // Save auth token to local storage
+        const token = _tokenResponse.idToken;
+        localStorage.setItem('token', token);
+        
 
         return {
             ok: true,
@@ -30,8 +35,12 @@ export const loginWithGoogle = async () => {
 export const registerUserWithEmailPassword = async ( { email, password, displayName } ) => {
 
     try {
-        const resp = await createUserWithEmailAndPassword( FirebaseAuth, email, password );
-        const { uid, photoURL } = resp.user;
+        const { user, _tokenResponse } = await createUserWithEmailAndPassword( FirebaseAuth, email, password );
+        const { uid, photoURL } = user;
+
+        // Save auth token to local storage
+        const token = _tokenResponse.idToken;
+        localStorage.setItem('token', token);
 
         await updateProfile( FirebaseAuth.currentUser, { displayName });
 
@@ -55,8 +64,12 @@ export const registerUserWithEmailPassword = async ( { email, password, displayN
 export const loginWithEmailPassword = async ( { email, password }) => {
 
     try {
-        const resp = await signInWithEmailAndPassword( FirebaseAuth, email, password);
-        const { displayName, photoURL, uid } = resp.user;
+        const {user, _tokenResponse} = await signInWithEmailAndPassword( FirebaseAuth, email, password);
+        const { displayName, photoURL, uid } = user;
+
+        // Save auth token to local storage
+        const token = _tokenResponse.idToken;
+        localStorage.setItem('token', token);
 
         return {
             ok: true,
