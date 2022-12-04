@@ -21,9 +21,12 @@ export const useAuthStore = () => {
 
         try {
             const resp = await loginWithEmailPassword( { email, password });
+            console.log("Login " + JSON.stringify(resp))
             
             // in case of ERROR -> logout
-            if( !resp.ok ) dispatch( onLogout( resp.errorMessage ) );
+            if( !resp.ok ) return dispatch( onLogout( resp.errorMessage ) );
+
+            console.log("Llega")
 
             // everything ok -> login
             dispatch( onLogin( resp ) );

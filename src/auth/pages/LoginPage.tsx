@@ -10,11 +10,20 @@ const initState = {
     password: ''
 }
 
+const formValidations = {
+    email: [ (value: string ) => {
+        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(value);
+        }, ''],
+    password: [ ( value: string ) => value.length >= 6, '']
+
+}
+
 export const LoginPage = () => {
 
     const { startLoginWithEmailAndPassword, startGoogleLogIn } = useAuthStore();
 
-    const { email, password, onChange } = useForm( initState );
+    const { email, password, onChange, isFormValid } = useForm( initState, formValidations );
 
     // Normal Login
     const onSubmit = ( event: FormEvent<HTMLFormElement> ) => {
@@ -65,6 +74,7 @@ export const LoginPage = () => {
                     >
                         <Grid item xs={ 12 } sm={ 6 }>
                             <Button 
+                                disabled={ !isFormValid } 
                                 type='submit' 
                                 variant='contained' 
                                 fullWidth>
