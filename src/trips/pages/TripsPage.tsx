@@ -1,30 +1,17 @@
-import { Button, Grid, Typography } from '@mui/material';
-import { useAuthStore } from '../../hooks/useAuthStore';
+import { Grid, Typography } from '@mui/material';
+import { TripsLayout } from '../layout/TripsLayout';
 
 
 export const TripsPage = () => {
 
-  const { displayName, startLogOut } = useAuthStore();
-
   return (
-    <>
-      <Typography>Pagina principal</Typography>
-
+    <TripsLayout>
+    
       <Grid container>
-        <Grid item xs={ 12 }>
-          <Typography>Name: { displayName }</Typography>
-        </Grid>
+        <Typography>Pagina principal</Typography>
 
-        <Grid item xs={ 12 } sm={ 6 }>
-          <Button 
-              onClick={ startLogOut } 
-              variant='contained' 
-              fullWidth>
-              <Typography>Logout</Typography>
-          </Button>
-        </Grid>
       </Grid>
 
-    </>
+    </TripsLayout>
   )
 }

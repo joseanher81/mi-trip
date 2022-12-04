@@ -7,6 +7,7 @@ interface AuthState {
     uid?: string | null,
     email?: string | null,
     displayName?: string | null,
+    photoURL?: string | null,
     errorMessage?: string | null,
 }
   
@@ -16,6 +17,7 @@ const initialState: AuthState = {
     uid: null,
     email: null,
     displayName: null,
+    photoURL: null,
     errorMessage: null
 }
   
@@ -28,6 +30,7 @@ export const authSlice = createSlice({
             state.uid = action.payload.uid;
             state.email = action.payload.email;
             state.displayName = action.payload.displayName;
+            state.photoURL = action.payload.photoURL;
             state.errorMessage = null;
         },
         onLogout: (state, action?: PayloadAction<string> ) => {
@@ -35,6 +38,7 @@ export const authSlice = createSlice({
             state.uid = null;
             state.email = null;
             state.displayName = null;
+            state.photoURL = null;
             state.errorMessage = action?.payload;
         },
         onChecking: ( state ) => {

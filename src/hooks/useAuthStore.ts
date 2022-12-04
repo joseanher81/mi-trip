@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from './reduxTypedHooks';
 
 export const useAuthStore = () => {
 
-    const { status, uid, displayName, errorMessage } = useAppSelector( state => state.auth );
+    const { status, uid, displayName, photoURL, errorMessage } = useAppSelector( state => state.auth );
     const dispatch = useAppDispatch();
 
     // Checking credentials
@@ -108,8 +108,9 @@ export const useAuthStore = () => {
         // Properties
         status,
         uid,
-        errorMessage,
+        photoURL,
         displayName,
+        errorMessage,
 
         // Methods
         startCheckingCredentials,

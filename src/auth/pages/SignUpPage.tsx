@@ -84,15 +84,20 @@ export const SignUpPage = () => {
 
                 </Grid>
 
-                <Grid container>
+                <Grid container mt={ 2 }>
                     <Grid item xs={ 12 }>
-                        <Button disabled={ !isFormValid } type='submit' fullWidth>
+                        <Button 
+                            disabled={ !isFormValid } 
+                            type='submit' 
+                            variant='contained'
+                            fullWidth
+                        >
                             Create account
                         </Button>
                     </Grid>
                 </Grid>
 
-                <Grid container direction='row' justifyContent='end'>
+                <Grid container direction='row' justifyContent='end' mt={ 1 }>
                     <Typography sx={{ mr: 1 }}>Already have an account?</Typography>
                     <Link color='inherit' to="/auth/login">
                         Log In

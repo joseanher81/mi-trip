@@ -12,6 +12,7 @@ export const AuthLayout = ({ children, title = '' }: Props) => {
         direction='column'
         alignItems='center'
         justifyContent='center'
+        mt={ 2 }
     >
         <Grid item>
 
