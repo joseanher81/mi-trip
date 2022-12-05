@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { Grid, TextField, Button, Typography } from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useAuthStore, useForm } from '../../hooks';
+import { displayName, email, password }  from './../../validators';
+
+const validations = { displayName, email, password }
 
 const initState = {
     displayName: '',
@@ -10,21 +13,11 @@ const initState = {
     password: ''
 }
 
-const formValidations = {
-    displayName: [ ( value: string ) => value.length >= 6, 'The name must have at least 6 characters'],
-    email: [ (value: string ) => {
-        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return regex.test(value);
-        }, 'The email is not valid'],
-    password: [ ( value: string ) => value.length >= 6, 'The password must have at least 6 characters']
-
-}
-
 export const SignUpPage = () => {
 
     const { startCreatingUserWithEmailAndPassword } = useAuthStore();
 
-    const { displayName, email, password, displayNameValid, emailValid, passwordValid, onChange, isFormValid } = useForm(initState, formValidations);
+    const { displayName, email, password, displayNameValid, emailValid, passwordValid, onChange, isFormValid } = useForm(initState, validations);
 
     const onSubmit = ( event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

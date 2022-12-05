@@ -1,29 +1,26 @@
 import { FormEvent } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Grid, TextField, Typography } from "@mui/material"
+import { Alert, AlertTitle, Button, Grid, TextField, Typography } from "@mui/material"
 import { AuthLayout } from "../layout/AuthLayout"
 import { useAuthStore, useForm } from './../../hooks';
 import { Google } from "@mui/icons-material";
+import { ErrorAlert } from "../components/ErrorAlert";
+import { email, password } from './../../validators';
+
+const validations = { email, password }
+
 
 const initState = {
     email: '',
     password: ''
 }
 
-const formValidations = {
-    email: [ (value: string ) => {
-        const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return regex.test(value);
-        }, ''],
-    password: [ ( value: string ) => value.length >= 6, '']
-
-}
 
 export const LoginPage = () => {
 
-    const { startLoginWithEmailAndPassword, startGoogleLogIn } = useAuthStore();
+    const { startLoginWithEmailAndPassword, startGoogleLogIn, errorMessage } = useAuthStore();
 
-    const { email, password, onChange, isFormValid } = useForm( initState, formValidations );
+    const { email, password, onChange, isFormValid } = useForm( initState, validations );
 
     // Normal Login
     const onSubmit = ( event: FormEvent<HTMLFormElement> ) => {
@@ -101,12 +98,20 @@ export const LoginPage = () => {
                         </Grid>
                     </Grid>
 
-                    <Grid container direction='row' justifyContent='end' mt={ 1 }>
+                    <Grid container direction='row' justifyContent='end' mt={ 1 } mb={1}>
                         <Typography sx={{ mr: 1 }}>Don't have an account?</Typography>
                         <Link color='inherit' to="/auth/signup">
                             Sign Up
                         </Link>
                     </Grid>
+
+                    <ErrorAlert message={ errorMessage }/>
+
+                    {/* <Alert onClose={() => {}} severity="error" >
+                        <AlertTitle>Error</AlertTitle>
+                        { errorMessage }
+                    </Alert> */}
+
                 </form>
 
         </AuthLayout>

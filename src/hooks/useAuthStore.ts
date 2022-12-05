@@ -46,7 +46,7 @@ export const useAuthStore = () => {
             const resp = await loginWithGoogle();
 
             // in case of ERROR -> logout
-            if( !resp.ok ) dispatch( onLogout( resp.errorMessage ) );
+            if( !resp.ok ) return dispatch( onLogout( resp.errorMessage ) );
 
             // everything ok -> login
             dispatch( onLogin( resp ) );
