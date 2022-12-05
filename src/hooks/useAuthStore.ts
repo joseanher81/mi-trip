@@ -1,18 +1,18 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { FirebaseAuth } from "../firebase/config";
 import { loginWithGoogle, loginWithEmailPassword, registerUserWithEmailPassword, logoutFirebase } from './../firebase/providers';
-import { onChecking, onLogin, onLogout } from './../store';
+import { onChecking, onLogin, onLogout, clearErrorMessage } from './../store';
 import { useAppDispatch, useAppSelector } from './reduxTypedHooks';
 
 export const useAuthStore = () => {
 
-    const { status, uid, displayName, photoURL, errorMessage } = useAppSelector( state => state.auth );
+    const { status, uid, displayName, photoURL, errorMessage, checking } = useAppSelector( state => state.auth );
     const dispatch = useAppDispatch();
 
     // Checking credentials
-    const startCheckingCredentials = async() => {
+/*     const startCheckingCredentials = async() => {
         dispatch( onChecking() );
-    }
+    } */
   
     // Login with password and email
     const startLoginWithEmailAndPassword = async( { email, password }: { email: string, password: string } ) => {
@@ -21,12 +21,9 @@ export const useAuthStore = () => {
 
         try {
             const resp = await loginWithEmailPassword( { email, password });
-            console.log("Login " + JSON.stringify(resp))
             
             // in case of ERROR -> logout
             if( !resp.ok ) return dispatch( onLogout( resp.errorMessage ) );
-
-            console.log("Llega")
 
             // everything ok -> login
             dispatch( onLogin( resp ) );
@@ -90,6 +87,12 @@ export const useAuthStore = () => {
         }
     } */
 
+    // Log out
+    const startLogOut = async() => {
+        await logoutFirebase();
+        dispatch( onLogout('') ); //TODO mejorarlo
+    }
+
     // Check if user is logged
     const checkAuth = () => {
         onAuthStateChanged( FirebaseAuth, async(user) => {
@@ -101,10 +104,9 @@ export const useAuthStore = () => {
         });
     }
 
-    // Log out
-    const startLogOut = async() => {
-        await logoutFirebase();
-        dispatch( onLogout('') ); //TODO mejorarlo
+    // Clear error messages
+    const clearErrors = () => {
+        dispatch( clearErrorMessage() );
     }
 
     return {
@@ -114,13 +116,14 @@ export const useAuthStore = () => {
         photoURL,
         displayName,
         errorMessage,
+        checking,
 
         // Methods
-        startCheckingCredentials,
         startLoginWithEmailAndPassword,
         startGoogleLogIn,
         startCreatingUserWithEmailAndPassword,
         startLogOut,
-        checkAuth
+        checkAuth,
+        clearErrors
     }
 }

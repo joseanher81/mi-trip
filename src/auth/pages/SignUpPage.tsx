@@ -1,9 +1,10 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, TextField, Button, Typography } from '@mui/material';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useAuthStore, useForm } from '../../hooks';
 import { displayName, email, password }  from './../../validators';
+import { ErrorAlert, Spinner } from "./../../components";
 
 const validations = { displayName, email, password }
 
@@ -15,9 +16,14 @@ const initState = {
 
 export const SignUpPage = () => {
 
-    const { startCreatingUserWithEmailAndPassword } = useAuthStore();
+    const { startCreatingUserWithEmailAndPassword, clearErrors, errorMessage, checking } = useAuthStore();
 
     const { displayName, email, password, displayNameValid, emailValid, passwordValid, onChange, isFormValid } = useForm(initState, validations);
+
+    // Clean all possible error messages
+    useEffect(() => {
+        clearErrors();
+    }, []);
 
     const onSubmit = ( event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -96,6 +102,12 @@ export const SignUpPage = () => {
                         Log In
                     </Link>
                 </Grid>
+
+                <Grid container display={ Boolean(errorMessage) ? '' : 'none' }>
+                    <ErrorAlert message={ errorMessage } />
+                </Grid>
+
+                <Spinner display={ checking! } />
 
             </form>
 

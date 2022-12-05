@@ -1,23 +1,32 @@
+import { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthRoutes } from '../auth/routes/AuthRoutes';
+import { CircularProgress, Grid } from '@mui/material';
 import { useAuthStore } from './../hooks';
 import { TripsPage } from '../trips/pages/TripsPage';
-import { useEffect } from 'react';
+
 
 
 export const AppRouter = () => {
 
   const { status, checkAuth } = useAuthStore();
 
-  useEffect( () => {
-    checkAuth();
-  }, []);
+  // useEffect( () => {
+  //   checkAuth();
+  // }, []);
 
-  if( status === 'checking' ) {
-    return (
-      <h3>Loading...</h3>
-    );
-  }
+  // if( status === 'checking' ) {
+  //   return (
+  //     <Grid 
+  //       container 
+  //       direction="row"
+  //       justifyContent="center"
+  //       mt={ 2 }
+  //     >
+  //       <CircularProgress />
+  //     </Grid>
+  //   );
+  // }
 
   return (
     <Routes>

@@ -1,14 +1,13 @@
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, AlertTitle, Button, Grid, TextField, Typography } from "@mui/material"
+import { Button, Grid, TextField, Typography } from "@mui/material"
 import { AuthLayout } from "../layout/AuthLayout"
 import { useAuthStore, useForm } from './../../hooks';
 import { Google } from "@mui/icons-material";
-import { ErrorAlert } from "../components/ErrorAlert";
+import { ErrorAlert, Spinner } from "./../../components";
 import { email, password } from './../../validators';
 
 const validations = { email, password }
-
 
 const initState = {
     email: '',
@@ -18,9 +17,15 @@ const initState = {
 
 export const LoginPage = () => {
 
-    const { startLoginWithEmailAndPassword, startGoogleLogIn, errorMessage } = useAuthStore();
+    const { startLoginWithEmailAndPassword, startGoogleLogIn, clearErrors, checking, errorMessage } = useAuthStore();
 
     const { email, password, onChange, isFormValid } = useForm( initState, validations );
+
+    // Clean all possible error messages
+    useEffect(() => {
+      clearErrors();
+    }, []);
+    
 
     // Normal Login
     const onSubmit = ( event: FormEvent<HTMLFormElement> ) => {
@@ -105,12 +110,11 @@ export const LoginPage = () => {
                         </Link>
                     </Grid>
 
-                    <ErrorAlert message={ errorMessage }/>
+                    <Grid container display={ Boolean(errorMessage) ? '' : 'none' }>
+                        <ErrorAlert message={ errorMessage } />
+                    </Grid>
 
-                    {/* <Alert onClose={() => {}} severity="error" >
-                        <AlertTitle>Error</AlertTitle>
-                        { errorMessage }
-                    </Alert> */}
+                    <Spinner display={ checking! } />
 
                 </form>
 

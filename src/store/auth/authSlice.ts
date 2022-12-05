@@ -3,22 +3,24 @@ import type { RootState } from './../store';
 
 // Define a type for the slice state
 interface AuthState {
-    status?: 'checking' | 'authenticated' | 'not-authenticated',
+    status?: 'authenticated' | 'not-authenticated',
     uid?: string | null,
     email?: string | null,
     displayName?: string | null,
     photoURL?: string | null,
     errorMessage?: string | null,
+    checking?: boolean
 }
   
 // Define the initial state using that type
 const initialState: AuthState = {
-    status: 'checking',
+    status: 'not-authenticated',
     uid: null,
     email: null,
     displayName: null,
     photoURL: null,
-    errorMessage: null
+    errorMessage: null,
+    checking: false
 }
   
 export const authSlice = createSlice({
@@ -31,6 +33,7 @@ export const authSlice = createSlice({
             state.email = action.payload.email;
             state.displayName = action.payload.displayName;
             state.photoURL = action.payload.photoURL;
+            state.checking = false;
             state.errorMessage = null;
         },
         onLogout: (state, action?: PayloadAction<string> ) => {
@@ -39,17 +42,21 @@ export const authSlice = createSlice({
             state.email = null;
             state.displayName = null;
             state.photoURL = null;
+            state.checking = false;
             state.errorMessage = action?.payload;
         },
         onChecking: ( state ) => {
-            state.status = 'checking';
+            state.checking = true;
         },
+        clearErrorMessage: ( state ) => {
+            state.errorMessage = undefined;
+        }
    }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onLogin, onLogout, onChecking } = authSlice.actions;
+export const { onLogin, onLogout, onChecking, clearErrorMessage } = authSlice.actions;
 
 // Not sure if we will use this yet
 export const selectUser = (state: RootState) => state.auth;
